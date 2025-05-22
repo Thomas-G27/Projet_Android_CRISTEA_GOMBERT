@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    // Ajoute ceci si ce n'est pas déjà fait
+    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
@@ -40,6 +43,13 @@ android {
 }
 
 dependencies {
+// Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+// Optionnel : pour les coroutines avec Room
+    implementation("androidx.room:room-ktx:2.6.1")
+// Optionnel : pour tester ta base de données
+    testImplementation("androidx.room:room-testing:2.6.1")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
