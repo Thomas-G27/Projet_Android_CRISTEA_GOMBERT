@@ -1,8 +1,8 @@
-package epf.projet_android_cristea_gombert.data.dao
+package epf.projet_android_cristea_gombert.dao
 
 import androidx.room.Dao
 import androidx.room.Query
-import epf.projet_android_cristea_gombert.data.model.Product
+import epf.projet_android_cristea_gombert.model.Product
 import kotlinx.coroutines.flow.Flow
 
 @Dao

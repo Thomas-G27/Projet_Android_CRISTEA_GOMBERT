@@ -1,4 +1,4 @@
-package epf.projet_android_cristea_gombert.data.model
+package epf.projet_android_cristea_gombert.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
