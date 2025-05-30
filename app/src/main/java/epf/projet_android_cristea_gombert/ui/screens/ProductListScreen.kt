@@ -6,8 +6,10 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.AsyncImage
 import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 
 @Composable
@@ -16,15 +18,52 @@ fun ProductListScreen(viewModel: ProductViewModel = viewModel()) {
     val isLoading = viewModel.isLoading
 
     if (isLoading) {
-        CircularProgressIndicator(modifier = Modifier.padding(16.dp))
+        Box(
+            modifier = Modifier
+                .fillMaxSize(),
+            contentAlignment = androidx.compose.ui.Alignment.Center
+        ) {
+            CircularProgressIndicator()
+        }
     } else {
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(8.dp)
+        ) {
             items(products) { product ->
-                Column(modifier = Modifier.padding(16.dp)) {
-                    Text(text = product.title, style = MaterialTheme.typography.titleMedium)
-                    Text(text = "${product.price} €")
-                    Spacer(modifier = Modifier.height(8.dp))
-                }
+                ProductCard(product = product)
+                Spacer(modifier = Modifier.height(12.dp))
+            }
+        }
+    }
+}
+
+@Composable
+fun ProductCard(product: epf.projet_android_cristea_gombert.model.Product) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 8.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+    ) {
+        Row(modifier = Modifier.padding(16.dp)) {
+            AsyncImage(
+                model = product.image,
+                contentDescription = product.title,
+                modifier = Modifier
+                    .size(100.dp)
+                    .padding(end = 16.dp),
+                contentScale = ContentScale.Crop
+            )
+
+            Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.weight(1f)
+            ) {
+                Text(text = product.title, style = MaterialTheme.typography.titleMedium)
+                Spacer(modifier = Modifier.height(4.dp))
+                Text(text = "${product.price} €", style = MaterialTheme.typography.bodyLarge)
             }
         }
     }
