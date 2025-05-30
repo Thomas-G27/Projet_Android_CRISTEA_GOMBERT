@@ -44,18 +44,19 @@ android {
 
 dependencies {
 // Room
-    implementation("androidx.room:room-runtime:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    implementation(libs.androidx.room.runtime)
+    kapt("androidx.room:room-compiler:2.7.1")
 // Optionnel : pour les coroutines avec Room
-    implementation("androidx.room:room-ktx:2.6.1")
-// Optionnel : pour tester ta base de données
-    testImplementation("androidx.room:room-testing:2.6.1")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.10.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
-    implementation("androidx.navigation:navigation-compose:2.7.5")
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation(libs.androidx.room.ktx)
+// Optionnel : pour tester la base de données
+    testImplementation(libs.androidx.room.testing)
+
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.logging.interceptor)
+    implementation(libs.androidx.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
