@@ -12,6 +12,7 @@ import epf.projet_android_cristea_gombert.ui.screens.HomeScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductDetailScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductListScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductSearchScreen
+import epf.projet_android_cristea_gombert.ui.screens.QRCodeScreen
 import epf.projet_android_cristea_gombert.ui.viewmodel.CartViewModel
 import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 
@@ -23,7 +24,7 @@ sealed class Screen(val route: String) {
     }
     object Search : Screen("search")
     object Cart : Screen("cart")
-
+    object QRCode : Screen("QRCode")
 }
 
 @Composable
@@ -35,6 +36,7 @@ fun NavGraph(navController: NavHostController) {
         composable(Screen.Home.route) {
             HomeScreen( onNavigateToProducts = {navController.navigate(Screen.Products.route)},
                         onNavigateToSearch = {navController.navigate(Screen.Search.route)},
+                        onNavigateToQRCode = {navController.navigate(Screen.QRCode.route)},
                         onNavigateToCart = { navController.navigate(Screen.Cart.route) }
             )
         }
@@ -76,6 +78,14 @@ fun NavGraph(navController: NavHostController) {
         composable(Screen.Cart.route) {
             CartScreen(onNavigateBack = { navController.popBackStack() },
             cartViewModel
+            )
+        }
+        composable(Screen.QRCode.route){
+            QRCodeScreen (
+                onNavigateBack = { navController.popBackStack()},
+                onNavigateToDetail = { productId ->
+                    navController.navigate(Screen.ProductDetail.createRoute(productId))
+                }
             )
         }
     }

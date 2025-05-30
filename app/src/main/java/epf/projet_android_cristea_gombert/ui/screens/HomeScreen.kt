@@ -11,6 +11,7 @@ import androidx.compose.ui.unit.dp
 fun HomeScreen(
     onNavigateToProducts: () -> Unit,
     onNavigateToSearch: () -> Unit,
+    onNavigateToQRCode: () -> Unit,
     onNavigateToCart: () -> Unit
 ) {
     Column(
@@ -29,11 +30,12 @@ fun HomeScreen(
         Button(onClick = onNavigateToSearch) {
             Text("Rechercher un produit")
         }
-        Button(
-            onClick = onNavigateToCart,
-            modifier = Modifier
-                .padding(16.dp),
-            ) {
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(onClick = onNavigateToQRCode) {
+            Text("recherche par QRCode")
+        }
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(onClick = onNavigateToCart) {
             Text("Mon panier")
         }
     }
