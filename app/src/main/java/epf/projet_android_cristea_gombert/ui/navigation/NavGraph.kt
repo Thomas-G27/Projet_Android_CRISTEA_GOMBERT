@@ -21,7 +21,9 @@ fun NavGraph(navController: NavHostController) {
             })
         }
         composable(Screen.Products.route) {
-            ProductListScreen()
+            ProductListScreen(onNavigateHome = {
+                navController.navigate(Screen.Home.route)
+            })
         }
     }
 }

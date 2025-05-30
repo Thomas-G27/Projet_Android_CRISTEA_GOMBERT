@@ -13,31 +13,42 @@ import coil.compose.AsyncImage
 import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 
 @Composable
-fun ProductListScreen(viewModel: ProductViewModel = viewModel()) {
+fun ProductListScreen(
+    viewModel: ProductViewModel = viewModel(),
+    onNavigateHome: () -> Unit
+) {
     val products = viewModel.products
     val isLoading = viewModel.isLoading
 
-    if (isLoading) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize(),
-            contentAlignment = androidx.compose.ui.Alignment.Center
-        ) {
-            CircularProgressIndicator()
-        }
-    } else {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(8.dp)
-        ) {
-            items(products) { product ->
-                ProductCard(product = product)
-                Spacer(modifier = Modifier.height(12.dp))
+    Box(modifier = Modifier.fillMaxSize()) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(androidx.compose.ui.Alignment.Center)
+            )
+        } else {
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp)
+            ) {
+                items(products) { product ->
+                    ProductCard(product = product)
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            }
+
+            Button(
+                onClick = onNavigateHome,
+                modifier = Modifier
+                    .align(androidx.compose.ui.Alignment.BottomStart)
+                    .padding(16.dp)
+            ) {
+                Text("Retour")
             }
         }
     }
 }
+
 
 @Composable
 fun ProductCard(product: epf.projet_android_cristea_gombert.model.Product) {
