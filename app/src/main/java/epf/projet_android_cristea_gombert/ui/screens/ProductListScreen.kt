@@ -5,34 +5,36 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import epf.projet_android_cristea_gombert.model.Product
 import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 
 @Composable
 fun ProductListScreen(
     viewModel: ProductViewModel = viewModel(),
-    onNavigateHome: () -> Unit
+    onNavigateHome: () -> Unit,
+    onNavigateToDetail: (Int) -> Unit
 ) {
     val products = viewModel.products
     val isLoading = viewModel.isLoading
 
     Box(modifier = Modifier.fillMaxSize()) {
         if (isLoading) {
-            CircularProgressIndicator(
-                modifier = Modifier.align(androidx.compose.ui.Alignment.Center)
-            )
+            CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
         } else {
             LazyColumn(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(8.dp)
+                modifier = Modifier.fillMaxSize().padding(8.dp)
             ) {
                 items(products) { product ->
-                    ProductCard(product = product)
+                    ProductCard(
+                        product = product,
+                        onClick = { onNavigateToDetail(product.id) }
+                    )
                     Spacer(modifier = Modifier.height(12.dp))
                 }
             }
@@ -40,7 +42,7 @@ fun ProductListScreen(
             Button(
                 onClick = onNavigateHome,
                 modifier = Modifier
-                    .align(androidx.compose.ui.Alignment.BottomStart)
+                    .align(Alignment.BottomStart)
                     .padding(16.dp)
             ) {
                 Text("Retour")
@@ -50,9 +52,11 @@ fun ProductListScreen(
 }
 
 
+
 @Composable
-fun ProductCard(product: epf.projet_android_cristea_gombert.model.Product) {
+fun ProductCard(product: Product, onClick: () -> Unit) {
     Card(
+        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 8.dp),
