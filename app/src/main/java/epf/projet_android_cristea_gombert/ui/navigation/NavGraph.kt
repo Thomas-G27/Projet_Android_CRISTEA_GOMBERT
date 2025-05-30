@@ -10,6 +10,7 @@ import androidx.navigation.navArgument
 import epf.projet_android_cristea_gombert.ui.screens.HomeScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductDetailScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductListScreen
+import epf.projet_android_cristea_gombert.ui.screens.ProductSearchScreen
 import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 
 sealed class Screen(val route: String) {
@@ -18,6 +19,7 @@ sealed class Screen(val route: String) {
     object ProductDetail : Screen("product_detail/{productId}") {
         fun createRoute(productId: Int) = "product_detail/$productId"
     }
+    object Search : Screen("search")
 }
 
 @Composable
@@ -25,9 +27,9 @@ fun NavGraph(navController: NavHostController) {
     val productViewModel: ProductViewModel = viewModel()
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
-            HomeScreen(onNavigateToProducts = {
-                navController.navigate(Screen.Products.route)
-            })
+            HomeScreen( onNavigateToProducts = {navController.navigate(Screen.Products.route)},
+                        onNavigateToSearch = {navController.navigate(Screen.Search.route)}
+            )
         }
         composable(Screen.Products.route) {
             ProductListScreen(
@@ -51,5 +53,14 @@ fun NavGraph(navController: NavHostController) {
                 })
             }
         }
+        composable(Screen.Search.route) {
+            ProductSearchScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToDetail = { productId ->
+                    navController.navigate(Screen.ProductDetail.createRoute(productId))
+                }
+            )
+        }
+
     }
 }
