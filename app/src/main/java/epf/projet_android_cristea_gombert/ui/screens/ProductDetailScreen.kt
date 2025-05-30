@@ -8,14 +8,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import epf.projet_android_cristea_gombert.model.Product
+import epf.projet_android_cristea_gombert.ui.viewmodel.CartViewModel
 
 @Composable
-fun ProductDetailScreen(product: Product, onNavigateBack: () -> Unit) {
+fun ProductDetailScreen(
+    product: Product,
+    onNavigateBack: () -> Unit,
+    onNavigateToCart: () -> Unit,
+    cartViewModel: CartViewModel
+) {
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(16.dp)) {
-
 
             Spacer(modifier = Modifier.height(16.dp))
 
@@ -38,7 +44,16 @@ fun ProductDetailScreen(product: Product, onNavigateBack: () -> Unit) {
             Text(text = product.category, style = MaterialTheme.typography.bodyMedium)
             Spacer(modifier = Modifier.height(8.dp))
             Text(text = product.description, style = MaterialTheme.typography.bodyLarge)
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(onClick = {
+                cartViewModel.addToCart(product)
+            }) {
+                Text("Ajouter au panier")
+            }
         }
+
         Button(
             onClick = onNavigateBack,
             modifier = Modifier
@@ -46,6 +61,15 @@ fun ProductDetailScreen(product: Product, onNavigateBack: () -> Unit) {
                 .padding(16.dp)
         ) {
             Text("Retour")
+        }
+
+        Button(
+            onClick = onNavigateToCart,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Text("Mon panier")
         }
     }
 }

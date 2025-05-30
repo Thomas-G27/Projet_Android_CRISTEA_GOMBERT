@@ -7,10 +7,12 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import epf.projet_android_cristea_gombert.ui.screens.CartScreen
 import epf.projet_android_cristea_gombert.ui.screens.HomeScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductDetailScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductListScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductSearchScreen
+import epf.projet_android_cristea_gombert.ui.viewmodel.CartViewModel
 import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 
 sealed class Screen(val route: String) {
@@ -20,11 +22,15 @@ sealed class Screen(val route: String) {
         fun createRoute(productId: Int) = "product_detail/$productId"
     }
     object Search : Screen("search")
+    object Cart : Screen("cart")
+
 }
 
 @Composable
 fun NavGraph(navController: NavHostController) {
     val productViewModel: ProductViewModel = viewModel()
+    val cartViewModel: CartViewModel = viewModel()
+
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
             HomeScreen( onNavigateToProducts = {navController.navigate(Screen.Products.route)},
@@ -48,9 +54,12 @@ fun NavGraph(navController: NavHostController) {
             val product = productViewModel.products.firstOrNull { it.id == productId }
 
             product?.let {
-                ProductDetailScreen(product = it, onNavigateBack = {
-                    navController.popBackStack()
-                })
+                ProductDetailScreen(
+                    product = it,
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToCart = { navController.navigate(Screen.Cart.route) },
+                    cartViewModel
+                )
             }
         }
         composable(Screen.Search.route) {
@@ -59,6 +68,11 @@ fun NavGraph(navController: NavHostController) {
                 onNavigateToDetail = { productId ->
                     navController.navigate(Screen.ProductDetail.createRoute(productId))
                 }
+            )
+        }
+        composable(Screen.Cart.route) {
+            CartScreen(onNavigateBack = { navController.popBackStack() },
+            cartViewModel
             )
         }
 
