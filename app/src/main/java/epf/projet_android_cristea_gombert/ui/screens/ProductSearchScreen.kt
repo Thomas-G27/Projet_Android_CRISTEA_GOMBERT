@@ -15,7 +15,8 @@ import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 fun ProductSearchScreen(
     viewModel: ProductViewModel = viewModel(),
     onNavigateBack: () -> Unit,
-    onNavigateToDetail: (Int) -> Unit
+    onNavigateToDetail: (Int) -> Unit,
+    onNavigateToCart: () -> Unit
 ) {
     var query by remember { mutableStateOf("") }
     val allProducts = viewModel.products
@@ -52,6 +53,14 @@ fun ProductSearchScreen(
                 .padding(16.dp)
         ) {
             Text("Retour")
+        }
+        Button(
+            onClick = onNavigateToCart,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+        ) {
+            Text("Mon panier")
         }
     }
 }

@@ -18,7 +18,8 @@ import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 fun ProductListScreen(
     viewModel: ProductViewModel = viewModel(),
     onNavigateHome: () -> Unit,
-    onNavigateToDetail: (Int) -> Unit
+    onNavigateToDetail: (Int) -> Unit,
+    onNavigateToCart: () -> Unit
 ) {
     val products = viewModel.products
     val isLoading = viewModel.isLoading
@@ -46,6 +47,14 @@ fun ProductListScreen(
                     .padding(16.dp)
             ) {
                 Text("Retour")
+            }
+            Button(
+                    onClick = onNavigateToCart,
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(16.dp)
+            ) {
+                Text("Mon panier")
             }
         }
     }

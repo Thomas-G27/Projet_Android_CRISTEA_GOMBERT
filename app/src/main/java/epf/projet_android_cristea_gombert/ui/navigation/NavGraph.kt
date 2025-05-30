@@ -34,7 +34,8 @@ fun NavGraph(navController: NavHostController) {
     NavHost(navController = navController, startDestination = Screen.Home.route) {
         composable(Screen.Home.route) {
             HomeScreen( onNavigateToProducts = {navController.navigate(Screen.Products.route)},
-                        onNavigateToSearch = {navController.navigate(Screen.Search.route)}
+                        onNavigateToSearch = {navController.navigate(Screen.Search.route)},
+                        onNavigateToCart = { navController.navigate(Screen.Cart.route) }
             )
         }
         composable(Screen.Products.route) {
@@ -43,7 +44,8 @@ fun NavGraph(navController: NavHostController) {
                 onNavigateHome = { navController.navigate(Screen.Home.route) },
                 onNavigateToDetail = { productId ->
                     navController.navigate(Screen.ProductDetail.createRoute(productId))
-                }
+                },
+                onNavigateToCart = { navController.navigate(Screen.Cart.route) }
             )
         }
         composable(
@@ -67,7 +69,8 @@ fun NavGraph(navController: NavHostController) {
                 onNavigateBack = { navController.popBackStack() },
                 onNavigateToDetail = { productId ->
                     navController.navigate(Screen.ProductDetail.createRoute(productId))
-                }
+                },
+                onNavigateToCart = { navController.navigate(Screen.Cart.route) }
             )
         }
         composable(Screen.Cart.route) {
@@ -75,6 +78,5 @@ fun NavGraph(navController: NavHostController) {
             cartViewModel
             )
         }
-
     }
 }

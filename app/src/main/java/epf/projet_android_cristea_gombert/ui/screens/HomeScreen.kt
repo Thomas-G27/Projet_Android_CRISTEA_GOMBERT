@@ -8,7 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun HomeScreen(onNavigateToProducts: () -> Unit, onNavigateToSearch: () -> Unit) {
+fun HomeScreen(
+    onNavigateToProducts: () -> Unit,
+    onNavigateToSearch: () -> Unit,
+    onNavigateToCart: () -> Unit
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -24,6 +28,13 @@ fun HomeScreen(onNavigateToProducts: () -> Unit, onNavigateToSearch: () -> Unit)
         Spacer(modifier = Modifier.height(20.dp))
         Button(onClick = onNavigateToSearch) {
             Text("Rechercher un produit")
+        }
+        Button(
+            onClick = onNavigateToCart,
+            modifier = Modifier
+                .padding(16.dp),
+            ) {
+            Text("Mon panier")
         }
     }
 }
