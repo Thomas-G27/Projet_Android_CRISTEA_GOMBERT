@@ -7,6 +7,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import epf.projet_android_cristea_gombert.model.Product
@@ -19,9 +20,11 @@ fun ProductDetailScreen(
     onNavigateToCart: () -> Unit,
     cartViewModel: CartViewModel
 ) {
+    val cartItems by remember { derivedStateOf { cartViewModel.cartItems } }
+    val quantity = cartItems.find { it.product.id == product.id }?.quantity ?: 0
+
     Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.padding(16.dp)) {
-
             Spacer(modifier = Modifier.height(16.dp))
 
             Image(
@@ -46,10 +49,52 @@ fun ProductDetailScreen(
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Button(onClick = {
-                cartViewModel.addToCart(product)
-            }) {
-                Text("Ajouter au panier")
+            // Affichage conditionnel de "Dans mon panier"
+            if (quantity > 0) {
+                Text(
+                    text = "Dans mon panier",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.Center
+                )
+                
+                Spacer(modifier = Modifier.height(8.dp))
+            }
+
+            // Affichage de la quantité et boutons de gestion
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                if (quantity > 0) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        IconButton(
+                            onClick = { cartViewModel.decreaseQuantity(product) }
+                        ) {
+                            Text("-", style = MaterialTheme.typography.titleLarge)
+                        }
+                        
+                        Text(
+                            text = quantity.toString(),
+                            style = MaterialTheme.typography.titleMedium
+                        )
+                        
+                        IconButton(
+                            onClick = { cartViewModel.addToCart(product) }
+                        ) {
+                            Text("+", style = MaterialTheme.typography.titleLarge)
+                        }
+                    }
+                } else {
+                    Button(onClick = { cartViewModel.addToCart(product) }) {
+                        Text("Ajouter au panier")
+                    }
+                }
             }
         }
 

@@ -13,6 +13,7 @@ import epf.projet_android_cristea_gombert.ui.screens.ProductDetailScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductListScreen
 import epf.projet_android_cristea_gombert.ui.screens.ProductSearchScreen
 import epf.projet_android_cristea_gombert.ui.screens.QRCodeScreen
+import epf.projet_android_cristea_gombert.ui.screens.PaymentScreen
 import epf.projet_android_cristea_gombert.ui.viewmodel.CartViewModel
 import epf.projet_android_cristea_gombert.ui.viewmodel.ProductViewModel
 
@@ -25,6 +26,7 @@ sealed class Screen(val route: String) {
     object Search : Screen("search")
     object Cart : Screen("cart")
     object QRCode : Screen("QRCode")
+    object Payment : Screen("payment")
 }
 
 @Composable
@@ -76,8 +78,24 @@ fun NavGraph(navController: NavHostController) {
             )
         }
         composable(Screen.Cart.route) {
-            CartScreen(onNavigateBack = { navController.popBackStack() },
-            cartViewModel
+            CartScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onNavigateToDetail = { productId ->
+                    navController.navigate(Screen.ProductDetail.createRoute(productId))
+                },
+                onNavigateToPayment = { navController.navigate(Screen.Payment.route) },
+                cartViewModel = cartViewModel
+            )
+        }
+        composable(Screen.Payment.route) {
+            PaymentScreen(
+                onNavigateBack = { navController.popBackStack() },
+                onPaymentComplete = {
+                    cartViewModel.clearCart()
+                    navController.navigate(Screen.Home.route) {
+                        popUpTo(Screen.Home.route) { inclusive = true }
+                    }
+                }
             )
         }
         composable(Screen.QRCode.route){
