@@ -8,21 +8,67 @@ import kotlinx.coroutines.launch
 import androidx.compose.runtime.*
 
 class ProductViewModel : ViewModel() {
-    var products by mutableStateOf<List<Product>>(emptyList())
-        private set
+    private val _products = mutableStateOf<List<Product>>(emptyList())
+    val products: List<Product> get() = _products.value
 
-    var isLoading by mutableStateOf(true)
-        private set
+    private val _isLoading = mutableStateOf(true)
+    val isLoading: Boolean get() = _isLoading.value
+
+    private val _error = mutableStateOf<String?>(null)
+    val error: String? get() = _error.value
+
+    private val _searchQuery = mutableStateOf("")
+    val searchQuery: String get() = _searchQuery.value
+
+    private val _selectedCategory = mutableStateOf<String?>(null)
+    val selectedCategory: String? get() = _selectedCategory.value
+
+    private var allProducts = listOf<Product>()
+    
+    val categories = mutableStateListOf<String>()
 
     init {
+        loadProducts()
+    }
+
+    private fun loadProducts() {
         viewModelScope.launch {
+            _isLoading.value = true
+            _error.value = null
             try {
-                products = RetrofitInstance.api.getProducts()
+                allProducts = RetrofitInstance.api.getProducts()
+                // Extraire les catégories uniques
+                categories.clear()
+                categories.addAll(allProducts.map { it.category }.distinct().sorted())
+                filterProducts()
             } catch (e: Exception) {
+                _error.value = "Erreur lors du chargement des produits: ${e.message}"
                 e.printStackTrace()
             } finally {
-                isLoading = false
+                _isLoading.value = false
             }
         }
+    }
+
+    fun updateSearchQuery(query: String) {
+        _searchQuery.value = query
+        filterProducts()
+    }
+
+    fun updateSelectedCategory(category: String?) {
+        _selectedCategory.value = category
+        filterProducts()
+    }
+
+    private fun filterProducts() {
+        _products.value = allProducts.filter { product ->
+            val matchesSearch = product.title.contains(_searchQuery.value, ignoreCase = true)
+            val matchesCategory = _selectedCategory.value == null || product.category == _selectedCategory.value
+            matchesSearch && matchesCategory
+        }
+    }
+
+    fun retry() {
+        loadProducts()
     }
 }

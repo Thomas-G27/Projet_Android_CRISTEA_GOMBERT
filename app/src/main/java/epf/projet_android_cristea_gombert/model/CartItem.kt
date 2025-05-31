@@ -2,5 +2,6 @@ package epf.projet_android_cristea_gombert.model
 
 data class CartItem(
     val product: Product,
-    var quantity: Int
+    var quantity: Int,
+    var isSetAside: Boolean = false
 )
